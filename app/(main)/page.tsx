@@ -1,12 +1,13 @@
-// import Navbar from "@/component/shared/Navbar";
-import { Button } from "@/components/ui/button";
+import { DynamicReviews } from "@/component/ui/DynamicReviews";
+
+
 
 
 export default function Home() {
   return (
    <div>
     {/* <Navbar /> */}
-    <Button className="mt-20 ml-20" >Click me </Button>
+      <DynamicReviews />
    </div>
   );
 }
