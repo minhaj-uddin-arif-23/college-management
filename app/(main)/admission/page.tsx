@@ -1,7 +1,10 @@
+import AdmissionTest from '@/component/ui/Admission'
 import React from 'react'
 
 export default function Admission() {
   return (
-    <div>Admission</div>
+    <div>
+      <AdmissionTest />
+    </div>
   )
 }
