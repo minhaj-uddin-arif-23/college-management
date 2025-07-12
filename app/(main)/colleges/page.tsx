@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -74,13 +75,13 @@ export default function Colleges() {
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
                   <strong>Research Count:</strong> {researchCount}
                 </p>
-                <Button
+                <Link href={`/colleges/${college._id}`}><Button
                   variant={"link"}
                   className="border-2 cursor-pointer"
                   onClick={() => toast(`Details for ${college.name}`)}
                 >
                   Details
-                </Button>
+                </Button></Link>
               </div>
             </div>
           );

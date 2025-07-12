@@ -92,7 +92,7 @@ export default function Navbar() {
   return (
     <nav
       ref={navRef}
-      className="w-full bg-white shadow-lg px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center z-50 fixed top-0"
+      className="w-full bg-white shadow-lg px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center z-50 fixed top-0 bg-opacity-90 backdrop-blur-md "
     >
       <Link
         href="/"
