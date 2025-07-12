@@ -1,5 +1,7 @@
+import CollegeSection from "@/component/ui/CollegeSection";
 import { DynamicReviews } from "@/component/ui/DynamicReviews";
 import ResearchPaper from "@/component/ui/ResearchPaper";
+
 
 
 
@@ -21,7 +23,12 @@ export default function Home() {
       <div className="absolute inset-0 bg-black/10 z-0" />
     </section>
   
+      <div>
+        <CollegeSection />
+      </div>
+
    <div>
+
     <DynamicReviews />
    </div>
    <div>

@@ -1,0 +1,132 @@
+"use client";
+import { Calendar, GraduationCap,  } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+interface College {
+  _id: string;
+  name: string;
+  image: string;
+  admissionDate: string;
+  admissionProcess: string;
+  events: string[];
+  researchWorks: string[];
+  sports: string[];
+}
+
+export default function CollegeSection() {
+  const [colleges, setColleges] = useState<College[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/homecollege")
+      .then((res) => res.json())
+      .then((data) => {
+        setColleges(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p className="text-center">Loading...</p>;
+
+  return (
+    <section className="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
+      {colleges.map((college) => (
+        <div
+          key={college._id}
+          className="bg-white shadow-md rounded-xl overflow-hidden transition-transform hover:scale-[1.02] flex flex-col h-full"
+        >
+          {/* Image */}
+          <div className="relative group overflow-hidden h-48 sm:h-44 md:h-44 lg:h-48">
+            {college.image ? (
+              <Image
+                src={college.image}
+                alt={college.name}
+                width={500}
+                height={200}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                No Image
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className="p-4 flex flex-col justify-between flex-grow space-y-3">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-800">{college.name}</h2>
+
+              <p className="text-sm text-gray-600 flex items-center gap-2 mt-1">
+                <Calendar className="w-4 h-4 text-indigo-500" />
+                <span className="font-medium">{college.admissionDate}</span>
+              </p>
+
+              <p className="text-sm text-gray-700 flex items-center gap-2">
+                <GraduationCap className="w-4 h-4 text-indigo-500" />
+                {college.admissionProcess}
+              </p>
+            </div>
+
+            {/* Tags Section */}
+            <div className="space-y-2 text-sm">
+              {/* Events */}
+              {college.events?.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-1">Events:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {college.events.map((event: string, i: number) => (
+                      <span
+                        key={i}
+                        className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-1 rounded-full"
+                      >
+                        {event}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Research */}
+              {college.researchWorks?.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-1">Research:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {college.researchWorks.map((res: string, i: number) => (
+                      <span
+                        key={i}
+                        className="bg-green-100 text-green-700 text-xs font-medium px-2 py-1 rounded-full"
+                      >
+                        {res}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sports */}
+              {college.sports?.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-1">Sports:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {college.sports.map((sport: string, i: number) => (
+                      <span
+                        key={i}
+                        className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-1 rounded-full"
+                      >
+                        {sport}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </section>
+
+
+  );
+}

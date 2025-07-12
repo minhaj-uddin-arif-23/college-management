@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/select";
 import toast from 'react-hot-toast';
 import { action } from '@/app/(main)/admission/actions';
 
