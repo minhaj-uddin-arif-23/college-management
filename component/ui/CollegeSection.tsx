@@ -1,6 +1,8 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Calendar, GraduationCap,  } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface College {
@@ -30,7 +32,11 @@ export default function CollegeSection() {
   if (loading) return <p className="text-center">Loading...</p>;
 
   return (
-    <section className="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
+    <>
+      
+             <h1 className="flex justify-center items-center text-4xl text-purple-600 font-semibold my-10"> College Data  </h1>
+      <section className="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 py-8">
+     
       {colleges.map((college) => (
         <div
           key={college._id}
@@ -105,7 +111,6 @@ export default function CollegeSection() {
                 </div>
               )}
 
-              {/* Sports */}
               {college.sports?.length > 0 && (
                 <div>
                   <h4 className="font-medium text-gray-700 mb-1">Sports:</h4>
@@ -121,11 +126,17 @@ export default function CollegeSection() {
                   </div>
                 </div>
               )}
+
+              <div>
+                <Button  variant={"link"} className="border-2">  <Link href={`/homeCollege/${college._id}`} >Details</Link></Button>
+              </div>
             </div>
           </div>
         </div>
       ))}
     </section>
+        
+    </>
 
 
   );
