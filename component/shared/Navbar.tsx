@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { LibraryBig, Menu, X, Search } from "lucide-react";
 import {
@@ -16,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function Navbar() {
-  const router = useRouter();
   const navRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -62,18 +60,21 @@ export default function Navbar() {
     }
   }, [menuOpen]);
 
+  // Dispatch search term via custom event instead of routing
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/colleges?search=${encodeURIComponent(searchQuery.trim())}`);
+      const searchTerm = searchQuery.trim().toLowerCase();
+      window.dispatchEvent(new CustomEvent("college-search", { detail: searchTerm }));
       setMenuOpen(false);
-      setSearchQuery(""); // optional
+      // Optionally keep search query visible:
+      // setSearchQuery("");
     }
   };
 
-  const handleSearchs = (value: string) => {
+  const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    router.push(`/colleges?search=${encodeURIComponent(value)}`);
+    window.dispatchEvent(new CustomEvent("college-search", { detail: value.toLowerCase() }));
   };
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -92,7 +93,7 @@ export default function Navbar() {
   return (
     <nav
       ref={navRef}
-      className="w-full bg-white shadow-lg px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center z-50 fixed top-0 bg-opacity-90 backdrop-blur-md "
+      className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md shadow px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center"
     >
       <Link
         href="/"
@@ -123,9 +124,9 @@ export default function Navbar() {
             ref={searchInputRef}
             type="text"
             value={searchQuery}
-            onChange={(e) => handleSearchs(e.target.value)}
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2 w-40 xl:w-72 rounded-lg border-1  text-sm "
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search colleges..."
+            className="pl-10 pr-4 py-2 w-40 xl:w-72 rounded-lg border-1 text-sm"
           />
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-900"
@@ -134,7 +135,7 @@ export default function Navbar() {
         </form>
       </div>
 
-      {/* Login */}
+      {/* Login Buttons */}
       <div className="hidden lg:block">
         <div className="flex items-center gap-4">
           <SignedOut>
@@ -173,20 +174,20 @@ export default function Navbar() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Mobile Search */}
-          <form onSubmit={handleSearch} className="relative">
-          <Input
-            ref={searchInputRef}
-            type="text"
-            value={searchQuery}
-            onChange={(e) => handleSearchs(e.target.value)}
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2  xl:w-72 rounded-lg border-1  text-sm w-full "
-          />
-          <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-900"
-            size={18}
-          />
-        </form>
+          <form onSubmit={handleSearch} className="relative w-full px-4">
+            <Input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Search colleges..."
+              className="pl-10 pr-4 py-2 rounded-lg border-1 text-sm w-full"
+            />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-900"
+              size={18}
+            />
+          </form>
 
           {navLinks.map((link, index) => (
             <Link

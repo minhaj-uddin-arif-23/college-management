@@ -1,9 +1,13 @@
 
-import React from 'react';
 import { auth } from "@clerk/nextjs/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import AdmissionCard from '@/component/ui/AdmissionCard';
-
+import { Metadata } from 'next';
+import React from 'react'
+export const metadata: Metadata = {
+  title: "CampusBondhu | My College ",
+  description: "CampusBondhu my college page",
+};
 export default async function MyCollege() {
   const { userId } = await auth();
   const { db } = await connectToDatabase();
