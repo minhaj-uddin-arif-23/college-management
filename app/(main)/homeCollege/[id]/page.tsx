@@ -1,22 +1,23 @@
-// app/homeCollege/[id]/page.tsx or wherever this page is
-
-import { connectToDatabase } from '@/lib/mongodb'
+import { connectToDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-
-import React from 'react';
 import { Calendar, GraduationCap } from 'lucide-react';
+import type { NextPage } from 'next';
 
-interface Props {
-  params: { id: string };
+// Define the expected props type
+interface HomeCollegeProps {
+  params: Promise<{ id: string }>;
 }
 
-export default async function HomeCollegeDetails({ params }: Props) {
+// Use NextPage for proper type inference
+const HomeCollegeDetails: NextPage<HomeCollegeProps> = async ({ params }) => {
+  // Await the params to resolve the Promise
+  const resolvedParams = await params;
   const { db } = await connectToDatabase();
-  const homeCollege = await db.collection("homecollege").findOne({
-    _id: new ObjectId(params.id),
+  const homeCollege = await db.collection('homecollege').findOne({
+    _id: new ObjectId(resolvedParams.id),
   });
 
   if (!homeCollege) return notFound();
@@ -105,4 +106,6 @@ export default async function HomeCollegeDetails({ params }: Props) {
       </div>
     </main>
   );
-}
+};
+
+export default HomeCollegeDetails;

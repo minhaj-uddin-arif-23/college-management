@@ -3,16 +3,23 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import type { NextPage } from "next";
 
-interface Props {
-  params: { id: string };
+// Define the expected props type
+interface CollegeDetailsProps {
+  params: Promise<{ id: string }>; // Use Promise for params
 }
 
-export default async function CollegeDetails({ params }: Props) {
+// Use NextPage type for better type inference
+const CollegeDetails: NextPage<CollegeDetailsProps> = async ({
+  params,
+}) => {
+  // Await the params to resolve the Promise
+  const resolvedParams = await params;
   const { db } = await connectToDatabase();
 
   const college = await db.collection("colleges").findOne({
-    _id: new ObjectId(params.id),
+    _id: new ObjectId(resolvedParams.id),
   });
 
   if (!college) return notFound();
@@ -30,9 +37,8 @@ export default async function CollegeDetails({ params }: Props) {
               : "/default.jpg"
           }
           alt={college.name}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg shadow-lg"
+          fill
+          className="object-cover rounded-lg shadow-lg"
         />
       </div>
 
@@ -79,4 +85,6 @@ export default async function CollegeDetails({ params }: Props) {
       )}
     </div>
   );
-}
+};
+
+export default CollegeDetails;
